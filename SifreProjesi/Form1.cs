@@ -14,9 +14,9 @@ namespace SifreProjesi
     public partial class Form1 : Form
     {
 
-        public const string MAIL = "danyal48@hotmail.com";
-        public const string SIFRE = "Dandan48---";
-        private int mailSifresi;
+        public const string MAIL = "xxx"; // kendi mail hesabınızı giriniz.Mail bu hesap üzerinden gönderilecektir.
+        public const string SIFRE = "yyy"; // kendi mail şifreniz
+        private int mailSifresi; // random oluşturulacak olan şifremiz.
 
         AccountDal ac = new AccountDal();
         public Form1()
@@ -26,6 +26,7 @@ namespace SifreProjesi
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // şifre yenileme kısımlarını gizliyoruz.
             tbxDogrula.Visible = false;
             lblDogrula.Visible = false;
             lblNewPassword.Visible = false;
@@ -35,6 +36,7 @@ namespace SifreProjesi
 
         private void btnLogIn_Click(object sender, EventArgs e)
         {
+            // LogIn kısmı
             if (ac.LogIn(new Account { Mail = tbxMail.Text,Password=tbxPassword.Text}))
             {
                 MessageBox.Show("Giriş Yapıldı!");
@@ -47,6 +49,7 @@ namespace SifreProjesi
 
         private void btnForgotPassword_Click(object sender, EventArgs e)
         {
+            // şifremi unuttum.Böyle bir hesap bulunuyor mu ?
             if (ac.isAccountExists(tbxMail.Text))
             {
                 Random ran = new Random();
@@ -56,7 +59,9 @@ namespace SifreProjesi
                 SmtpClient istemci = new SmtpClient();
                 istemci.Credentials = new System.Net.NetworkCredential(MAIL, SIFRE);
                 istemci.Port = 587;
-                istemci.Host = "smtp-mail.outlook.com";
+                istemci.Host = "smtp-mail.outlook.com"; // outlook ile bu göndermek için kodumuz budur.
+                // gmail ile istenirse smtp.gmail.com ile sağlanabilir.
+                // bunun için google hesabınızın düşük güvenlik modunun açılması lazımdır!
                 istemci.EnableSsl = true;
                 msj.To.Add(tbxMail.Text);
                 msj.From = new MailAddress(MAIL);
@@ -69,8 +74,6 @@ namespace SifreProjesi
                 lblNewPassword.Visible = true;
                 tbxNewPassword.Visible = true;
                 btnNewPassword.Visible = true;
-
-                
             }
             else
             {
@@ -81,7 +84,7 @@ namespace SifreProjesi
 
         private void btnNewPassword_Click(object sender, EventArgs e)
         {
-            
+         // yeni şifre oluşturma kısmı   
             if(tbxNewPassword.Text.Length != 0 && mailSifresi.ToString() == tbxDogrula.Text)
             {
                 MessageBox.Show("Şifreniz Değiştirildi.");
